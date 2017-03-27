@@ -1,0 +1,33 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+# Eclipse
+.settings/
+.project
+.pydevproject
+
+# Django Recommended
+*.egg-info
+*.pot
+*.py[co]
+__pycache__
+MANIFEST
+dist/
+docs/_build/
+docs/locale/
+node_modules/
+tests/coverage_html/
+tests/.coverage
+build/
+tests/report/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# sqlite
+db.sqlite3
