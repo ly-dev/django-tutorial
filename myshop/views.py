@@ -1,5 +1,9 @@
 from django.contrib.auth.models import User, Group
+from django.contrib.auth import authenticate
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import viewsets
+from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -26,33 +30,59 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class LoginView(APIView):
     def post(self, request):
-        result = {
-            'status': 'error',
-            'message': 'Oops! Something goes wrong'
-        }
+        data = request.data
 
-        if (request.data and request.data.get('username', None) and request.data.get('password', None)):
-            username = request.data.get('username');
-            user = User.objects.filter(username=username).first()
-            if (user):
-                password = request.data.get('password');
-                if (user.check_password(password)):
-                    token = Token.objects.get_or_create(user=user)
-                    result['status'] = 'success'
-                    result['message'] = 'ok'
-                    result['data'] = {
-                        'username': username,
-                        'token': token.key,
-                    }
-                else:
-                    result['message'] = 'Invalid password'
+        if ('email' in data) and ('password' in data):
+            email = data['email']
+            password = data['password']
+
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = None
+
+            if user and user.check_password(password):
+                if not user.is_active:
+                    msg = _('User account is disabled.')
+                    raise serializers.ValidationError(msg, code='authorization')
+
+                token, created = Token.objects.get_or_create(user=user)
+
+                return Response({'email': email, 'token': token.key})
             else:
-                result['message'] = 'User not found: ' + username
+                msg = _('Unable to log in with provided credentials.')
+                raise serializers.ValidationError(msg, code='authorization')
         else:
-            result['message'] = 'Invalid parameters'
+            msg = _('Must include "email" and "password".')
+            raise serializers.ValidationError(msg, code='authorization')
 
-        return Response(result)
+class SignUpView(APIView):
+    def post(self, request):
+        data = request.data
 
+        if ('email' in data) and ('password' in data):
+            email = data['email']
+            password = data['password']
+
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = None
+
+            if user:
+                msg = _('User exists already.')
+                raise serializers.ValidationError(msg, code='authorization')
+
+            else:
+                user = User.objects.create_user(username=email,
+                                 email=email,
+                                 password=password)
+                token, created = Token.objects.get_or_create(user=user)
+
+                return Response({'email': email, 'token': token.key})
+        else:
+            msg = _('Must include "email" and "password".')
+            raise serializers.ValidationError(msg, code='authorization')
 class ProductView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
