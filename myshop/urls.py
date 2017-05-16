@@ -14,5 +14,5 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^login$', views.LoginView.as_view()),
     url(r'^sign-up$', views.SignUpView.as_view()),
-    url(r'^supermarket/(?P<supermarket>\w{0,20})/products/$', views.ProductView.as_view()),
+    url(r'^supermarket/(?P<supermarket>\w{0,20})/products/$', views.ProductsView.as_view()),
 ]

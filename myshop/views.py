@@ -83,7 +83,49 @@ class SignUpView(APIView):
         else:
             msg = _('Must include "email" and "password".')
             raise serializers.ValidationError(msg, code='authorization')
-class ProductView(APIView):
+
+class ProductsView(APIView):
+    def post(self, request, supermarket):
+        result  = []
+        template = {
+            "id": 0,
+            "name": "name",
+            "supermarket": 0,
+            "supermarket_name": "supermarket_name",
+            "brand": "brand",
+            "product_id": 0,
+            "serving_size": "serving size",
+            "size": "380g",
+            "food_type": "food",
+            "fat_100": 8.5,
+            "sat_100": 4.6,
+            "sugar_100": 3,
+            "salt_100": 0.78,
+            "fat_serving": 10.8,
+            "sat_serving": 5.8,
+            "sugar_serving": 3.8,
+            "salt_serving": 0.98,
+            "tl_fat": "Red",
+            "tl_sat": "Amber",
+            "tl_sugar": "Green",
+            "tl_salt": "Amber",
+            "owner": 1
+        }
+
+        if (request.data):
+            data = request.data
+
+            for id in data:
+                product = template
+                product['id'] = id
+                product['name'] = 'product_' + str(id)
+                product['supermarket_name'] = supermarket
+                result.append(product)
+
+        return Response(result)
+
+
+class AuthSampleView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
