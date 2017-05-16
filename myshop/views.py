@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .serializers import GroupSerializer, UserSerializer
 
+import random
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -109,19 +110,27 @@ class ProductsView(APIView):
             "tl_sat": "Amber",
             "tl_sugar": "Green",
             "tl_salt": "Amber",
-            "owner": 1
+            "owner": 1,
+            "health_score": 0
         }
+
+        trafficLights = ["Red", "Amber", "Green"]
+        trafficTabs = ['tl_fat', 'tl_sat', 'tl_sugar', 'tl_salt']
 
         if (request.data):
             data = request.data
 
-            print('xxxxxx')
-            print(data)
             for productId in data:
-                product = template
+                product = template.copy()
                 product['product_id']= int(productId)
                 product['name'] = 'product_' + str(productId)
                 product['supermarket_name'] = supermarket
+                product['health_score'] = 0
+                for tag in trafficTabs:
+                    rdm = random.randint(0, len(trafficLights)-1)
+                    product[tag] = trafficLights[rdm]
+                    product['health_score']  =  product['health_score'] + 2^rdm
+
                 result.append(product)
 
         return Response(result)
