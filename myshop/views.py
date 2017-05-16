@@ -115,10 +115,12 @@ class ProductsView(APIView):
         if (request.data):
             data = request.data
 
-            for id in data:
+            print('xxxxxx')
+            print(data)
+            for productId in data:
                 product = template
-                product['id'] = id
-                product['name'] = 'product_' + str(id)
+                product['product_id']= int(productId)
+                product['name'] = 'product_' + str(productId)
                 product['supermarket_name'] = supermarket
                 result.append(product)
 
