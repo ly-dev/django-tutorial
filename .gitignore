@@ -5,6 +5,7 @@
 .settings/
 .project
 .pydevproject
+*.launch
 
 # Django Recommended
 *.egg-info
