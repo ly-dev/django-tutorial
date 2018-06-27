@@ -122,7 +122,7 @@ class ProductsView(APIView):
 
             for productId in data:
                 product = template.copy()
-                product['product_id']= int(productId)
+                product['product_id']= str(productId)
                 product['name'] = 'product_' + str(productId)
                 product['supermarket_name'] = supermarket
                 product['health_score'] = 0
@@ -280,17 +280,14 @@ class ConfigureView(APIView):
                   },
                   'products': [
                     {
-                      'selector': 'div#content ul#prodList li.productDetails',
+                      'selector': 'div#js-productPageFops ul.fops>li',
                       'id': {
-                        'attribute': {
-                          'name': 'id',
-                          'pattern': '\\d+$'
-                        }
+                        'attribute': 'data-sku'
                       },
                       'trafficLight': {
                         'template': 'traffic_light_list_page',
-                        'selector': 'div.shelfTop, div.listProductWrap div.productDescription p.rating',
-                        'position': 'after'
+                        'selector': 'div.fop-item div.fop-content',
+                        'position': 'append'
                       }
                     }
                   ]
@@ -381,17 +378,14 @@ class ConfigureView(APIView):
                   },
                   'products': [
                     {
-                      'selector': 'div#content ul#prodList li.productDetails',
+                      'selector': 'div#js-productPageFops ul.fops>li',
                       'id': {
-                        'attribute': {
-                          'name': 'id',
-                          'pattern': '\\d+$'
-                        }
+                        'attribute': 'data-sku'
                       },
                       'trafficLight': {
                         'template': 'traffic_light_list_page',
-                        'selector': 'div.shelfTop, div.listProductWrap div.productDescription p.rating',
-                        'position': 'after'
+                        'selector': 'div.fop-item div.fop-content',
+                        'position': 'append'
                       }
                     }
                   ]
@@ -629,24 +623,24 @@ class ConfigureView(APIView):
               'pages': [
                 {
                   'type': 'browse',
-                  'selector': 'div.aisle',
+                  'url_pattern': '/shop/browse/groceries',
                   'timers': {
                     'process_products': 2000
                   },
                   'products': [
                     {
-                      'selector': 'div.products-grid div.m-product-cell',
+                      'selector': 'article[data-test="product-pod"]',
                       'id': {
-                        'selector': 'a.m-product-open-details',
+                        'selector': 'header a',
                         'attribute': {
                           'name': 'href',
-                          'pattern': '\\d+$'
+                          'pattern': '\\d+-\\d+-\\d+$'
                         }
                       },
                       'trafficLight': {
                         'template': 'traffic_light_list_page',
-                        'selector': 'div.m-product-labels',
-                        'position': 'after'
+                        'selector': 'section:first-child',
+                        'position': 'append'
                       }
                     }
                   ]
