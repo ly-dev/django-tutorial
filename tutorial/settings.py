@@ -25,7 +25,7 @@ SECRET_KEY = 'txk&vpe^s_8y@f@9_&^lpfg&t9+$=w4#7w3u0dpd62-+$)w&tc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['sbyong.global-initiative.com']
 
 
 # Application definition
