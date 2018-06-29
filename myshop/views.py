@@ -595,8 +595,13 @@ class ConfigureView(APIView):
                       },
                       'trafficLight': {
                         'template': 'traffic_light_detail_page',
-                        'selector': 'body.controls--unit-toggle',
-                        'position': 'before'
+                        'position': {
+                            'css' : {
+                             'position': 'absolute',
+                            'top': '360px',
+                            'left': '50%'
+                            }
+                        }
                       },
                       'productResource': {
                         'name': {
