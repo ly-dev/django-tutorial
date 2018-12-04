@@ -138,655 +138,663 @@ class ProductsView(APIView):
 class ConfigureView(APIView):
     def post(self, request, supermarket):
         template = {
-            #//////////////////// ASDA ////////////////////
-            'asda': {
+          #///////////////////// ASDA ////////////////////
+          'asda': {
+            'timers': {
+            'process_pages': 2000
+            },
+            'pages': [
+            {
+              'type': 'browse',
+              'url_pattern': '/(cat|dept|aisle|shelf|special-offers)/',
               'timers': {
-                'process_pages': 2000
+              'process_products': 2000
               },
-              'pages': [
-                {
-                  'type': 'browse',
-                  'url_pattern': '/(cat|dept|aisle|shelf|special-offers)/',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    #// Potential in here to separate out different product lists, on the same page
-                    #// e.g. recommended products etc...
-                    {
-                      'selector': 'div.listings div.product',
-                      'id': {
-                        'selector': 'a.addItemToTrolley',
-                        'attribute': 'data-skuid'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.cartBground',
-                        'position': 'before'
-                      }
-                    }
-                  ]
+              'products': [
+              #/// Potential in here to separate out different product lists, on the same page
+              #/// e.g. recommended products etc...
+              {
+                'selector': 'div.listings div.product',
+                'id': {
+                'selector': 'a.addItemToTrolley',
+                'attribute': 'data-skuid'
                 },
-                {
-                  'type': 'basket',
-                  'url_pattern': '/trolley',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'trolleySummary': {
-                    'template': 'trolley_summary_page',
-                    'selector': 'div#fullTrolley',
-                    'position': 'before'
-                  },
-                  'products': [
-                    {
-                      'selector': 'div.full-trolley-table div.full-trolley-prod-listing',
-                      'id': {
-                        'selector': 'div.product>a',
-                        'attribute': { 'name': 'href', 'pattern': '\\d+$' }
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.fulltrolleyDetails',
-                        'position': 'after'
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'div.productInformation span.productTitle>a>strong',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'div.product>a>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'div.product>a>img',
-                          'attribute': 'alt'
-                        },
-                        'quantity': {
-                          'selector': 'div.price-info div.quantity-col.qty-price div.qty-price> span.qtyTxt',
-                          'text': True
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  'type': 'detail',
-                  'url_pattern': '/product/.*/\\d+$',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'div#mainContainer',
-                      'id': {
-                        'url_pattern': '/\\d+$',
-                        'id_pattern': '\\d+$'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_detail_page',
-                        'selector': 'div#itemDetails p.prod-btn-holder',
-                        'position': 'before'
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'div#itemDetails>h1.prod-title',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'div.s7staticimage>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'div.s7staticimage>img',
-                          'attribute': 'alt'
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  'type': 'search',
-                  'url_pattern': '/search/',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'div.productListing div.product',
-                      'id': {
-                        'selector': 'a.addItemToTrolley',
-                        'attribute': 'data-skuid'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.cartBground',
-                        'position': 'before'
-                      }
-                    }
-                  ]
-                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'div.cartBground',
+                'position': 'before'
+                }
+              }
               ]
             },
-            #//////////////////// MORRISONS & OCADO ////////////////////
-            'morrisons': {
-              'pages': [
-                {
-                  'type': 'browse',
-                  'url_pattern': '/webshop/getCategories.do',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'div#js-productPageFops ul.fops>li',
-                      'id': {
-                        'attribute': 'data-sku'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.fop-item div.fop-content',
-                        'position': 'append'
-                      }
-                    }
-                  ]
+            {
+              'type': 'basket',
+              'url_pattern': '/trolley',
+              'timers': {
+              'process_products': 2000
+              },
+              'trolleySummary': {
+              'template': 'trolley_summary_page',
+              'selector': 'div#fullTrolley',
+              'position': 'before'
+              },
+              'products': [
+              {
+                'selector': 'div.full-trolley-table div.full-trolley-prod-listing',
+                'id': {
+                'selector': 'div.product>a',
+                'attribute': { 'name': 'href', 'pattern': '\\d+$' }
                 },
-                {
-                  'type': 'basket',
-                  'url_pattern': '/webshop/displaySmartBasket.do|/webshop/displayLoggedOutSmartBasket.do',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'trolleySummary': {
-                    'template': 'trolley_summary_page',
-                    'selector': 'div#smartTrolley',
-                    'position': 'before'
-                  },
-                  'products': [
-                    {
-                      'selector': 'div#smartTrolley ul li.pictureView',
-                      'id': {
-                        'attribute': {
-                          'name': 'id',
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'div.fulltrolleyDetails',
+                'position': 'after'
+                },
+                'productResource': {
+                'name': {
+                  'selector': 'div.productInformation span.productTitle>a>strong',
+                  'text': True
+                },
+                'image_src': {
+                  'selector': 'div.product>a>img',
+                  'attribute': 'src'
+                },
+                'image_alt': {
+                  'selector': 'div.product>a>img',
+                  'attribute': 'alt'
+                },
+                'quantity': {
+                  'selector': 'div.price-info div.quantity-col.qty-price div.qty-price> span.qtyTxt',
+                  'text': True
+                }
+                }
+              }
+              ]
+            },
+            {
+              'type': 'detail',
+              'url_pattern': '/product/.*/\\d+$',
+              'timers': {
+              'process_products': 2000
+              },
+              'products': [
+              {
+                'selector': 'div#mainContainer',
+                'id': {
+                'url_pattern': '/\\d+$',
+                'id_pattern': '\\d+$'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_detail_page',
+                'selector': 'div#itemDetails p.prod-btn-holder',
+                'position': 'before'
+                },
+                'productResource': {
+                'name': {
+                  'selector': 'div#itemDetails>h1.prod-title',
+                  'text': True
+                },
+                'image_src': {
+                  'selector': 'div.s7staticimage>img',
+                  'attribute': 'src'
+                },
+                'image_alt': {
+                  'selector': 'div.s7staticimage>img',
+                  'attribute': 'alt'
+                }
+                }
+              }
+              ]
+            },
+            {
+              'type': 'search',
+              'url_pattern': '/search/',
+              'timers': {
+              'process_products': 2000
+              },
+              'products': [
+              {
+                'selector': 'div.productListing div.product',
+                'id': {
+                'selector': 'a.addItemToTrolley',
+                'attribute': 'data-skuid'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'div.cartBground',
+                'position': 'before'
+                }
+              }
+              ]
+            },
+            ]
+          },
+          #///////////////////// MORRISONS & OCADO ////////////////////
+          'morrisons': {
+            'pages': [
+            {
+              'type': 'browse',
+              'url_pattern': '/browse',
+              'timers': {
+              'process_products': 2000
+              },
+              'products': [
+              {
+                'selector': 'ul.fops>li div.fop-item',
+                'id': {
+                'attribute': 'data-sku'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'div.fop-content',
+                'position': 'append'
+                }
+              }
+              ]
+            },
+            {
+              'type': 'basket',
+              'url_pattern': '/webshop/displaySmartBasket.do|/webshop/displayLoggedOutSmartBasket.do',
+              'timers': {
+              'process_products': 2000
+              },
+              'trolleySummary': {
+              'template': 'trolley_summary_page',
+              'selector': 'div#smartTrolley',
+              'position': 'before'
+              },
+              'products': [
+              {
+                'selector': 'div#smartTrolley ul li.pictureView',
+                'id': {
+                'attribute': {
+                  'name': 'id',
+                  'pattern': '\\d+$'
+                }
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'div.pictureViewInfo',
+                'position': 'after'
+                },
+                'productResource': {
+                'name': {
+                  'selector': 'a.productImageLink>img',
+                  'attribute': 'alt'
+                },
+                'image_src': {
+                  'selector': 'a.productImageLink>img',
+                  'attribute': 'src'
+                },
+                'image_alt': {
+                  'selector': 'a.productImageLink>img',
+                  'attribute': 'alt'
+                },
+                'quantity': {
+                  'selector': 'input[name=quantity]',
+                  'attribute': 'value'
+                }
+                }
+              }
+              ]
+            },
+            {
+              'type': 'detail',
+              'selector': 'div#content div[itemtype="http://schema.org/Product"]',
+              'products': [
+              {
+                'selector': 'div#content div[itemtype="http://schema.org/Product"]',
+                'id': {
+                'selector': 'meta[itemprop=sku]',
+                'attribute': 'content'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_detail_page',
+                'selector': 'div.productDescription',
+                'position': 'after'
+                },
+                'productResource': {
+                'name': {
+                  'selector': 'h1.productTitle strong[itemprop=name]',
+                  'text': True
+                },
+                'image_src': {
+                  'selector': 'ul#galleryImages>li.active>a>img',
+                  'attribute': 'src'
+                },
+                'image_alt': {
+                  'selector': 'ul#galleryImages>li.active>a>img',
+                  'attribute': 'alt'
+                }
+                }
+              }
+              ]
+            },
+            {
+              'type': 'search',
+              'url_pattern': '/search',
+              'timers': {
+              'process_products': 2000
+              },
+              'products': [
+              {
+                'selector': 'ul.fops>li div.fop-item',
+                'id': {
+                'attribute': 'data-sku'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'div.fop-content',
+                'position': 'append'
+                }
+              }
+              ]
+            },
+            ]
+          },
+          #///////////////////// SAINSBURY'S ////////////////////
+          'sainsburys': {
+            'pages': [
+            {
+              'type': 'browse',
+              'selector': 'body#shelfPage',
+              'products': [
+              {
+                'selector': 'ul.productLister>li',
+                'id': {
+                'selector': 'form.addToTrolleyForm input[name=SKU_ID]',
+                'attribute': 'value'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'div.productInfo',
+                'position': 'append'
+                }
+              }
+              ]
+            },
+            {
+              'type': 'basket',
+              'selector': 'body#fullTrolley',
+              'trolleySummary': {
+              'template': 'trolley_summary_page',
+              'selector': 'div.article>div.tableContainer',
+              'position': 'before'
+              },
+              'products': [
+              {
+                'selector': 'table.fullTrolley tbody>tr',
+                'id': {
+                'selector': 'td.productPrice>div.siteCatalystTag',
+                'text': True
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'td.product div.productContainer',
+                'position': 'append'
+                },
+                'productResource': {
+                'name': {
+                  'selector': 'td.product>div.productContainer>a',
+                  'text': True
+                },
+                'image_src': {
+                  'selector': 'td.product>div.productContainer>a>img',
+                  'attribute': 'src'
+                },
+                'image_alt': {
+                  'selector': 'td.product>div.productContainer>a',
+                  'text': True
+                },
+                'quantity': {
+                  'selector': 'td.quantity>ul>li.inTrolley',
+                  'text': True
+                }
+                }
+              }
+              ]
+            },
+            {
+              'type': 'detail',
+              'selector': 'body#productDetails',
+              'products': [
+              {
+                'selector': 'div.productContent',
+                'id': {
+                'selector': 'input[name=productId]',
+                'attribute': 'value'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_detail_page',
+                'selector': 'div.productTitleDescriptionContainer',
+                #// Append traffic lights (goes inside the div)
+                'position': 'append'
+                },
+                'productResource': {
+                'name': {
+                  'selector': 'div.productTitleDescriptionContainer>h1',
+                  'text': True
+                },
+                'image_src': {
+                  'selector': 'div#productImageHolder>img',
+                  'attribute': 'src'
+                },
+                'image_alt': {
+                  'selector': 'div#productImageHolder>img',
+                  'attribute': 'alt'
+                }
+                }
+              }
+              ]
+            },
+            {
+              'type': 'search',
+              'selector': 'body#searchResultsPage',
+              'products': [
+              {
+                'selector': 'ul.productLister>li',
+                'id': {
+                'selector': 'form.addToTrolleyForm input[name=productId]',
+                'attribute': 'value'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'div.productInfo',
+                'position': 'append'
+                }
+              }
+              ]
+            },
+            ]
+          },
+          #///////////////////// TESCO ////////////////////
+          'tesco': {
+            'timers': {
+              'process_pages': 2000
+            },
+            'pages': [
+              {
+                'type': 'browse',
+                'url_pattern': '/shop',
+                'timers': {
+                  'process_products': 2000
+                },
+                'products': [
+                  {
+                    'selector': 'ul.product-list>li.product-list--list-item',
+                    'id': {
+                      'selector': 'div[data-auto-id]',
+                      'attribute': 'data-auto-id'
+                    },
+                    'trafficLight': {
+                      'template': 'traffic_light_list_page',
+                      'selector': 'div.product-details--wrapper',
+                      'position': 'after'
+                    }
+                  }
+                ]
+              },
+              {
+                'type': 'basket',
+                'url_pattern': '/trolley|/review-trolley',
+                'timers': {
+                  'process_products': 2000
+                },
+                'trolleySummary': {
+                  'template': 'trolley_summary_page',
+                  'selector': 'ul[data-auto="product-list"]',
+                  'position': 'before'
+                },
+                'products': [
+                  {
+                    'selector': 'ul[data-auto="product-list"]>li.product-list--list-item',
+                    'id': {
+                      'selector': 'a.product-image-wrapper',
+                      'attribute': {
+                          'name': 'href',
                           'pattern': '\\d+$'
-                        }
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.pictureViewInfo',
-                        'position': 'after'
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'a.productImageLink>img',
-                          'attribute': 'alt'
-                        },
-                        'image_src': {
-                          'selector': 'a.productImageLink>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'a.productImageLink>img',
-                          'attribute': 'alt'
-                        },
-                        'quantity': {
-                          'selector': 'input[name=quantity]',
-                          'attribute': 'value'
-                        }
                       }
-                    }
-                  ]
-                },
-                {
-                  'type': 'detail',
-                  'selector': 'div#content div[itemtype="http://schema.org/Product"]',
-                  'products': [
-                    {
-                      'selector': 'div#content div[itemtype="http://schema.org/Product"]',
-                      'id': {
-                        'selector': 'meta[itemprop=sku]',
-                        'attribute': 'content'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_detail_page',
-                        'selector': 'div.productDescription',
-                        'position': 'after'
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'h1.productTitle strong[itemprop=name]',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'ul#galleryImages>li.active>a>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'ul#galleryImages>li.active>a>img',
-                          'attribute': 'alt'
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  'type': 'search',
-                  'url_pattern': '/webshop/getSearchProducts.do',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'div#js-productPageFops ul.fops>li',
-                      'id': {
-                        'attribute': 'data-sku'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.fop-item div.fop-content',
-                        'position': 'append'
-                      }
-                    }
-                  ]
-                },
-              ]
-            },
-            #//////////////////// SAINSBURY'S ////////////////////
-            'sainsburys': {
-              'pages': [
-                {
-                  'type': 'browse',
-                  'selector': 'body#shelfPage',
-                  'products': [
-                    {
-                      'selector': 'ul.productLister>li',
-                      'id': {
-                        'selector': 'form.addToTrolleyForm input[name=SKU_ID]',
-                        'attribute': 'value'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.productInfo',
-                        'position': 'append'
-                      }
-                    }
-                  ]
-                },
-                {
-                  'type': 'basket',
-                  'selector': 'body#fullTrolley',
-                  'trolleySummary': {
-                    'template': 'trolley_summary_page',
-                    'selector': 'div.article>div.tableContainer',
-                    'position': 'before'
-                  },
-                  'products': [
-                    {
-                      'selector': 'table.fullTrolley tbody>tr',
-                      'id': {
-                        'selector': 'td.productPrice>div.siteCatalystTag',
+                    },
+                    'trafficLight': {
+                      'template': 'traffic_light_list_page',
+                      'selector': 'div.product-details--content',
+                      'position': 'append'
+                    },
+                    'productResource': {
+                      'name': {
+                        'selector': 'div.product-details--content>a.product-tile--title',
                         'text': True
                       },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'td.product div.productContainer',
-                        'position': 'append'
+                      'image_src': {
+                        'selector': 'div.product-image__container>img',
+                        'attribute': 'src'
                       },
-                      'productResource': {
-                        'name': {
-                          'selector': 'td.product>div.productContainer>a',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'td.product>div.productContainer>a>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'td.product>div.productContainer>a',
-                          'text': True
-                        },
-                        'quantity': {
-                          'selector': 'td.quantity>ul>li.inTrolley',
-                          'text': True
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  'type': 'detail',
-                  'selector': 'body#productDetails',
-                  'products': [
-                    {
-                      'selector': 'div.productContent',
-                      'id': {
-                        'selector': 'input[name=productId]',
+                      'image_alt': {
+                        'selector': 'div.product-image__container>img',
+                        'attribute': 'alt'
+                      },
+                      'quantity': {
+                        'selector': 'div.inputControl-wrapper>input.product-input',
                         'attribute': 'value'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_detail_page',
-                        'selector': 'div.productTitleDescriptionContainer',
-                        'position': 'append'
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'div.productTitleDescriptionContainer>h1',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'div#productImageHolder>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'div#productImageHolder>img',
-                          'attribute': 'alt'
-                        }
                       }
                     }
-                  ]
-                },
-                {
-                  'type': 'search',
-                  'selector': 'body#searchResultsPage',
-                  'products': [
-                    {
-                      'selector': 'ul.productLister>li',
-                      'id': {
-                        'selector': 'form.addToTrolleyForm input[name=productId]',
-                        'attribute': 'value'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.productInfo',
-                        'position': 'append'
-                      }
-                    }
-                  ]
-                },
-              ]
-            },
-            #//////////////////// TESCO ////////////////////
-            'tesco': {
-              'timers': {
-                'process_pages': 2000
+                  }
+                ]
               },
-              'pages': [
-                {
-                  'type': 'browse',
-                  'url_pattern': '/shop',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'ul.product-list>li.product-list--list-item',
-                      'id': {
-                        'selector': 'div[data-auto-id]',
-                        'attribute': 'data-auto-id'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.product-details--wrapper',
-                        'position': 'after'
-                      }
-                    }
-                  ]
+              {
+                'type': 'detail',
+                'url_pattern': '/products/\\d+$',
+                'timers': {
+                  #// Scan page every 2 seconds in case of page changes by AJAX
+                  'process_products': 2000
                 },
-                {
-                  'type': 'basket',
-                  'url_pattern': '/trolley',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'trolleySummary': {
-                    'template': 'trolley_summary_page',
-                    'selector': 'ul[data-auto="product-list"]',
-                    'position': 'before'
-                  },
-                  'products': [
-                    {
-                      'selector': 'ul[data-auto="product-list"]>li.product-list--list-item',
-                      'id': {
-                        'selector': 'a.product-image-wrapper',
-                        'attribute': {
-                            'name': 'href',
-                            'pattern': '\\d+$'
-                        }
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.product-details--content',
-                        'position': 'append'
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'div.product-details--content>a.product-tile--title',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'div.product-image__container>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'div.product-image__container>img',
-                          'attribute': 'alt'
-                        },
-                        'quantity': {
-                          'selector': 'div.inputControl-wrapper>input.product-input',
-                          'attribute': 'value'
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  'type': 'detail',
-                  'url_pattern': '/products/\\d+$',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'div.grocery-product:first-child',
-                      'id': {
-                        'url_pattern': '/\\d+$',
-                        'id_pattern': '\\d+$'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_detail_page',
-                        'position': {
-                            'css' : {
-                             'position': 'absolute',
-                            'top': '360px',
-                            'left': '50%'
-                            }
-                        }
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'h1.product-title__h1',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'div.product-image__container>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'div.product-image__container>img',
-                          'attribute': 'alt'
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  'type': 'search',
-                  'url_pattern': '/search',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'ul.product-list>li.product-list--list-item',
-                      'id': {
-                        'selector': 'div[data-auto-id]',
-                        'attribute': 'data-auto-id'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'div.product-details--wrapper',
-                        'position': 'after'
-                      }
-                    }
-                  ]
-                },
-              ]
-            },
-            #//////////////////// WAITROSE ////////////////////
-            'waitrose': {
-              'timers': {
-                'process_pages': 2000
-              },
-              'pages': [
-                {
-                  'type': 'browse',
-                  'url_pattern': '/ecom/shop/browse/groceries',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'article[data-test="product-pod"]',
-                      'id': {
-                        'selector': 'header a',
-                        'attribute': {
-                          'name': 'href',
-                          'pattern': '\\d+-\\d+-\\d+$'
-                        }
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'section:first-child',
-                        'position': 'append'
-                      }
-                    }
-                  ]
-                },
-                {
-                  'type': 'basket',
-                  'url_pattern': '/ecom/shop/trolley',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'trolleySummary': {
-                    'template': 'trolley_summary_page',
-                    'selector': 'main>div>div:nth-child(2) button[data-test="empty-trolley"]',
-                    'position': 'after'
-                  },
-                  'products': [
-                    {
-                      'selector': 'section[data-test="grouped-section"] ul li',
-                      'id': {
-                        'selector': 'section a[data-test="link-pdp"]',
-                        'attribute': {
-                          'name': 'href',
-                          'pattern': '\\d+-\\d+-\\d+$'
-                        }
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'section:nth-child(3)',
-                        'position': 'append'
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'section a[data-test="link-pdp-title"]',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'section a[data-test="link-pdp"]>img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'section a[data-test="link-pdp"]>img',
-                          'attribute': 'alt'
-                        },
-                        'quantity': {
-                          'selector': 'section:nth-child(2)>div',
-                          'text': {
-                            'pattern': '\\d+'
+                'products': [
+                  {
+                    'selector': 'div.product-details-page',
+                    #// Get product id to be able to ask API for data
+                    'id': {
+                      'url_pattern': '/\\d+$',
+                      'id_pattern': '\\d+$'
+                    },
+                    #// Define where to put the traffic light 
+                    'trafficLight': {
+                      'template': 'traffic_light_detail_page',
+                      #// Define where to put the traffic light
+                      #// Tesco is difficult, so need to use absolute value. 
+                      #// Currently defines div with main product data, and then uses absolute to inject traffic lights
+                      'position': {
+                          'css' : {
+                          'position': 'absolute',
+                          'top': '360px',
+                          'left': '50%'
                           }
-                        }
+                      }
+                    },
+                    #// Get data from the page
+                    #// Define selectors to get images
+                    'productResource': {
+                      'name': {
+                        'selector': 'h1.product-title__h1',
+                        'text': True
+                      },
+                      'image_src': {
+                        'selector': 'div.product-image__container>img',
+                        'attribute': 'src'
+                      },
+                      'image_alt': {
+                        'selector': 'div.product-image__container>img',
+                        'attribute': 'alt'
                       }
                     }
-                  ]
+                  }
+                ]
+              },
+              {
+                'type': 'search',
+                'url_pattern': '/search',
+                'timers': {
+                  'process_products': 2000
                 },
-                {
-                  'type': 'detail',
-                  'url_pattern': '/ecom/products/.+/\\d+-\\d+-\\d+$',
-                  'products': [
-                    {
-                      'selector': 'div#content',
-                      'id': {
-                        'url_pattern': '/\\d+-\\d+-\\d+$',
-                        'id_pattern': '\\d+-\\d+-\\d+$'
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_detail_page',
-                        'position': {
-                            'css': {
-                                'position': 'absolute',
-                                'top': '320px',
-                                'right': '120px',
-                            }
-                        }
-                      },
-                      'productResource': {
-                        'name': {
-                          'selector': 'h1#productName span[data-test="product-name"]',
-                          'text': True
-                        },
-                        'image_src': {
-                          'selector': 'section#productImage picture img',
-                          'attribute': 'src'
-                        },
-                        'image_alt': {
-                          'selector': 'section#productImage picture img',
-                          'attribute': 'alt'
-                        }
-                      }
+                'products': [
+                  {
+                    'selector': 'ul.product-list>li.product-list--list-item',
+                    'id': {
+                      'selector': 'div[data-auto-id]',
+                      'attribute': 'data-auto-id'
+                    },
+                    'trafficLight': {
+                      'template': 'traffic_light_list_page',
+                      'selector': 'div.product-details--wrapper',
+                      'position': 'after'
                     }
-                  ]
+                  }
+                ]
+              },
+            ]
+          },
+          #///////////////////// WAITROSE ////////////////////
+          'waitrose': {
+            'timers': {
+            'process_pages': 2000
+            },
+            'pages': [
+            {
+              'type': 'browse',
+              'url_pattern': '/ecom/shop/browse/groceries',
+              'timers': {
+              'process_products': 2000
+              },
+              'products': [
+              {
+                'selector': 'article[data-test="product-pod"]',
+                'id': {
+                'selector': 'header a',
+                'attribute': {
+                  'name': 'href',
+                  'pattern': '\\d+-\\d+-\\d+$'
+                }
                 },
-                {
-                  'type': 'search',
-                  'url_pattern': '/shop/search',
-                  'timers': {
-                    'process_products': 2000
-                  },
-                  'products': [
-                    {
-                      'selector': 'article[data-test="product-pod"]',
-                      'id': {
-                        'selector': 'header a',
-                        'attribute': {
-                          'name': 'href',
-                          'pattern': '\\d+-\\d+-\\d+$'
-                        }
-                      },
-                      'trafficLight': {
-                        'template': 'traffic_light_list_page',
-                        'selector': 'section:first-child',
-                        'position': 'append'
-                      }
-                    }
-                  ]
-                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'section:first-child',
+                'position': 'append'
+                }
+              }
               ]
-            }
+            },
+            {
+              'type': 'basket',
+              'url_pattern': '/ecom/shop/trolley',
+              'timers': {
+              'process_products': 2000
+              },
+              'trolleySummary': {
+              'template': 'trolley_summary_page',
+              'selector': 'main>div>div:nth-child(2) button[data-test="empty-trolley"]',
+              'position': 'after'
+              },
+              'products': [
+              {
+                'selector': 'section[data-test="grouped-section"] ul li',
+                'id': {
+                'selector': 'a[data-test="link-pdp"]',
+                'attribute': {
+                  'name': 'href',
+                  'pattern': '\\d+-\\d+-\\d+$'
+                }
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'a[data-test="link-pdp-title"]',
+                'position': 'after'
+                },
+                'productResource': {
+                'name': {
+                  'selector': 'a[data-test="link-pdp-title"] span:nth-child(2)',
+                  'text': True
+                },
+                'image_src': {
+                  'selector': 'a[data-test="link-pdp"]>img',
+                  'attribute': 'src'
+                },
+                'image_alt': {
+                  'selector': 'a[data-test="link-pdp"]>img',
+                  'attribute': 'alt'
+                },
+                'quantity': {
+                  'selector': 'div:nth-child(2)>div:nth-child(3)>div:first-child',
+                  'text': {
+                  'pattern': '\\d+'
+                  }
+                }
+                }
+              }
+              ]
+            },
+            {
+              'type': 'detail',
+              'url_pattern': '/ecom/products/.+/\\d+-\\d+-\\d+$',
+              'products': [
+              {
+                'selector': 'div#content',
+                'id': {
+                'url_pattern': '/\\d+-\\d+-\\d+$',
+                'id_pattern': '\\d+-\\d+-\\d+$'
+                },
+                'trafficLight': {
+                'template': 'traffic_light_detail_page',
+                'position': {
+                  'css': {
+                    'position': 'absolute',
+                    'top': '320px',
+                    'right': '120px',
+                  }
+                }
+                },
+                'productResource': {
+                'name': {
+                  'selector': 'h1#productName span[data-test="product-name"]',
+                  'text': True
+                },
+                'image_src': {
+                  'selector': 'section#productImage picture img',
+                  'attribute': 'src'
+                },
+                'image_alt': {
+                  'selector': 'section#productImage picture img',
+                  'attribute': 'alt'
+                }
+                }
+              }
+              ]
+            },
+            {
+              'type': 'search',
+              'url_pattern': '/shop/search',
+              'timers': {
+              'process_products': 2000
+              },
+              'products': [
+              {
+                'selector': 'article[data-test="product-pod"]',
+                'id': {
+                'selector': 'header a',
+                'attribute': {
+                  'name': 'href',
+                  'pattern': '\\d+-\\d+-\\d+$'
+                }
+                },
+                'trafficLight': {
+                'template': 'traffic_light_list_page',
+                'selector': 'section:first-child',
+                'position': 'append'
+                }
+              }
+              ]
+            },
+            ]
           }
-        
+        }        
         template['ocado'] = template ['morrisons']
         
         result = template[supermarket]
